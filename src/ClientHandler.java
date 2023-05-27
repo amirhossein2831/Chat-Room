@@ -3,7 +3,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
-    private ArrayList<ClientHandler> clients = new ArrayList<>();
+    private static ArrayList<ClientHandler> clients = new ArrayList<>();
+
     private Socket socket;
     private BufferedReader br;
     private BufferedWriter bw;
@@ -24,6 +25,7 @@ public class ClientHandler implements Runnable {
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.setUserName(br.readLine());
             clients.add(this);
+
             broadcastMessage("Server: " + this.getUserName() + " Enter the chat");
         } catch (IOException e) {
             closeEveryThings(socket, bw, br);
@@ -33,10 +35,10 @@ public class ClientHandler implements Runnable {
     public void broadcastMessage(String messageToSend) {
         for (ClientHandler clientHandler : clients) {
             try {
-                if (!clientHandler.getUserName().equals(this.getUserName())) {
-                    bw.write(messageToSend);
-                    bw.newLine();
-                    bw.flush();
+                if (!clientHandler.getUserName().equals(userName)) {
+                    clientHandler.bw.write(messageToSend);
+                    clientHandler.bw.newLine();
+                    clientHandler.bw.flush();
                 }
             } catch (IOException e) {
                 closeEveryThings(socket, bw, br);

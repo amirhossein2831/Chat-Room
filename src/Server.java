@@ -19,6 +19,7 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 LOGGER.info(ANSI_GREEN + "A new client connected to Server" + ANSI_RESET);
                 System.out.println(ANSI_GREEN + "the port of the connection is : " + socket.getPort() + ANSI_RESET);
+                System.out.println("--------------------------------------------");
                 ClientHandler clientHandler = new ClientHandler(socket);
                 Thread thread = new Thread(clientHandler);
                 thread.start();

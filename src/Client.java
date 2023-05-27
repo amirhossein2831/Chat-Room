@@ -12,10 +12,6 @@ public class Client {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public Client(Socket socket, String userName) {
         try {
             this.socket = socket;
@@ -46,9 +42,10 @@ public class Client {
 
     public void listenForMessage() {
         new Thread(() -> {
+            String messageFromServer;
             while (socket.isConnected()) {
                 try {
-                    String messageFromServer = br.readLine();
+                    messageFromServer = br.readLine();
                     if (messageFromServer == null) {
                         System.exit(0);
                     }
@@ -79,9 +76,9 @@ public class Client {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("enter your userName for the grout chat: ");
-        System.out.println("If you want to quit Enter the EXIT");
+        System.out.println("If you want to quit Enter the #exit");
         String userName = scanner.nextLine();
-        if(userName.equals("EXIT"))
+        if(userName.equals("#exit"))
             return;
         Socket socketHold = new Socket("127.0.0.1", 8888);
         Client client = new Client(socketHold,userName);
